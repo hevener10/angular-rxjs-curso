@@ -54,8 +54,8 @@ totalDeLivros$ = this.campoBusca.valueChanges //$ indica que é um observable po
     map          ((items) => this.LivrosResultadoParaLivros(items)),        //mapeia os itens retornado da api e transforma na minha entidade
     catchError   ((erro) => {                                               //tratamento de erro
       console.log(erro);
-        return throwError(()=>new Error(this.mensagemErro='Erro ao buscar livros')) // retorna um observable com o erro
-      //return EMPTY;                                                         //retorna um observable vazio
+      return throwError(()=>new Error(this.mensagemErro='Erro ao buscar livros'))  // retorna um observable com o erro
+                                                                                   //return EMPTY;                                                         //retorna um observable vazio
     })
   );
 
