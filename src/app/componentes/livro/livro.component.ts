@@ -8,8 +8,8 @@ import { Livro } from 'src/app/models/interfaces';
 })
 export class LivroComponent {
 
-  @Input() livro: Livro;
-  modalAberto: boolean;
+  @Input() livro    : Livro;
+         modalAberto: boolean;
 
   onModalChange(evento: boolean) {
     this.modalAberto = evento;
