@@ -1,36 +1,29 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, debounceTime, filter, map, switchMap, tap } from 'rxjs';
 import { Livro } from 'src/app/models/interfaces';
 import { LivroService } from 'src/app/service/livro.service';
-import { LivrosResultado } from '../../models/interfaces';
+import { FormControl } from '@angular/forms';
 
+const PAUSA_DIGITACAO = 300;
 @Component({
   selector: 'app-lista-livros',
   templateUrl: './lista-livros.component.html',
   styleUrls: ['./lista-livros.component.css']
 })
-export class ListaLivrosComponent implements OnDestroy {
+export class ListaLivrosComponent{
 
-  listaLivros: Livro[];
-  campoBusca: string = '';
-  subscription: Subscription;
-  livro: Livro;
+  campoBusca  = new FormControl();
+  livro       : Livro;
   constructor(private service: LivroService) { }
 
-  buscarLivros() {
-    this.subscription = this.service.buscar(this.campoBusca)
-      .subscribe(
-        {
-          next: (items) => {
-            this.listaLivros=this.LivrosResultadoParaLivros(items)
-          },
-          error: (erro: any) => {
-            console.error(erro);
-          }
-        }
-      )
-  }
-
+  livrosEncontrados$ = this.campoBusca.valueChanges //$ indica que é um observable por convenção
+  .pipe(
+    debounceTime(PAUSA_DIGITACAO),//tempo de espera para fazer a requisição
+    tap(console.log),//mostra no console o que está sendo digitado
+    filter((valorDigitado) => valorDigitado.length >= 3),//limita quantidade de carcteres
+    switchMap((valorDigitado) => this.service.buscar(valorDigitado)),//switchMap cancela a requisição anterior
+    map((items) => this.LivrosResultadoParaLivros(items))//mapeia os itens retornado da api e transforma na minha entidade
+  );
   LivrosResultadoParaLivros(items): Livro[] {
     const livros: Livro[] = [];
     items.forEach(item => {
@@ -46,10 +39,5 @@ export class ListaLivrosComponent implements OnDestroy {
     }
     )
     return livros;
-  }
-
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }
