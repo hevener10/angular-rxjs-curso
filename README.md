@@ -25,3 +25,11 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+## Descrição Curso
+No projeto utilizado no curso, o qual chamamos de "Buscante", implementaremos uma busca dinâmica de livros, através do consumo de uma API externa: a Google Books. Para isso:
+
+conheceremos sobre o padrão Observer;
+entenderemos como funciona o ciclo de vida dos Observables;
+utilizaremos vários operadores do RxJS para manipular o fluxo de informações retornado, otimizando assim a performance e a experiência da pessoa usuária.
